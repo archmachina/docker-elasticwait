@@ -146,6 +146,10 @@ def main():
     # Break here if we have tried too many times
     attempt = attempt + 1
     if max_attempts > 0 and attempt > max_attempts:
+      # If we've exhausted attempts, the cluster state is still not green, but we are able to
+      # connect, then return success
+      if elastic_result.ok:
+        return
       raise Exception('Could not connect to elastic and exhausted attempts')
 
     # Wait before trying again
